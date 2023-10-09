@@ -10,6 +10,7 @@ class modified_RegEx():
         self.search_and_replace = None
         self.g_flag = None
         self.i_flag = None
+        self.text = None
         
     def bmh(self, text, pattern): # regresa todas las incidencias del patrón en el texto
         self.size_of_text = len(text)
@@ -43,15 +44,17 @@ class modified_RegEx():
             if chr(j) not in self.dictionary:
                 self.dictionary[chr(j)] = len(pattern)
          
-    def read_first_function(self, query, new):
+    def read_first_function(self, query, new, text):
         self.query = query  
         self.new = new    
-        
+        self.text = text
         if self.query.startswith("fr "):
             self.search_and_replace = True
+            self.query = self.query[3:]
         
         elif self.query.startswith("f "):
             self.search_and_replace = False
+            self.query = self.query[2:]
 
         else:
             return "query no válida"
@@ -61,26 +64,30 @@ class modified_RegEx():
         
     def read_flags(self):
         if self.query[len(self.query)-1] == 'i' and self.query[len(self.query)-2] == ' ':
-            if self.query[len(self.query)-2] == 'g' and self.query[len(self.query)-3] == ' ':
+            if self.query[len(self.query)-3] == 'g' and self.query[len(self.query)-4] == ' ':
                 #flag: i and g
                 self.i_flag = True
                 self.g_flag = True
+                self.query = self.query[:len(self.query)-4]
                 
             else:
                 #flag: i
                 self.i_flag = True
                 self.g_flag = False
+                self.query = self.query[:len(self.query)-2]
                 
-        if self.query[len(self.query)-1] == 'g':
-            if self.query[len(self.query)-2] == 'i' and self.query[len(self.query)-3] == ' ':
+        elif self.query[len(self.query)-1] == 'g':
+            if self.query[len(self.query)-3] == 'i' and self.query[len(self.query)-4] == ' ':
                 #flag: i and g
                 self.i_flag = True
                 self.g_flag = True
+                self.query = self.query[:len(self.query)-4]
                 
             else:
                 #flag: g
                 self.i_flag = False
                 self.g_flag = True
+                self.query = self.query[:len(self.query)-2]
 
         else:
             self.i_flag = False
@@ -90,19 +97,37 @@ class modified_RegEx():
        
     
     def process(self):
-        pass
+        
+        #operador de repetición
+        if '{' in self.query and '}' in self.query:
+            i = 0  # Inicializa el índice i
+            while i < len(self.query):
+                if self.query[i] == '{':
+                    letter = self.query[i-1]
+                    repeat = int(self.query[i + 1])
+                    repeat_letters = ''
+                    
+                    for j in range(repeat-1):
+                        repeat_letters += letter
+                        
+                    self.query = self.query[:i] + repeat_letters + self.query[i+3:]
+                i += 1
+                  
+            self.build_bmt(self.query) 
+            return self.bmh(self.text, self.query)    
+        
+        else:
+            self.build_bmt(self.query) 
+            return self.bmh(self.text, self.query)       
     
-text = "This is a sample text that you can use for testing your pattern matching code. It contains various words and characters to search through the text."
+text = "This is a sample text that you gooooold can use for testing your pattern matching code. It contains various words gooooold and characters to search through the text."
 pattern = "ing"
 
 st = modified_RegEx()
 
-print(st.read_first_function(input()))
+print(st.read_first_function(input(), 'hola', text))
 
 
-shifts = st.bmh(text, pattern) 
 
-print(shifts)
-print("Coincidences: "+str(len(shifts)))
 
     
