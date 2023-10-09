@@ -12,23 +12,37 @@ class modified_RegEx():
         self.i_flag = None
         self.text = None
         
-    def bmh(self, text, pattern): # regresa todas las incidencias del patrón en el texto
+    def bmh(self, text, pattern): 
         self.size_of_text = len(text)
         self.size_of_pattern = len(pattern)
         self.build_bmt(pattern)
+        
+        found = False
         for i in range(self.size_of_text - self.size_of_pattern + 1):
-            
+            if i >= (self.size_of_text - self.size_of_pattern + 1):
+                break
             
             k = self.size_of_pattern - 1
             temp = i + k
             for k in range(k, -1, -1):
-                if pattern[k] != text[temp]:
+                
+                if pattern[k] != text[temp] and pattern[k] != '*':
                     i += (self.dictionary[text[temp]]) - 1
                     break
                 elif k == 0:
                     self.shifts.append(i)
+                    found = True
+                    if self.search_and_replace:
+                        text = text[:i] + self.new + text[i + self.size_of_pattern:]
+                        i += len(self.new)
+                        self.size_of_text = len(text)
+                    
                 temp -= 1
+             
+            if found and not self.g_flag :
+                break    
                 
+        print(text)        
         return self.shifts
 
     def build_bmt(self, pattern):
@@ -120,12 +134,12 @@ class modified_RegEx():
             self.build_bmt(self.query) 
             return self.bmh(self.text, self.query)       
     
-text = "This is a sample text that you gooooold can use for testing your pattern matching code. It contains various words gooooold and characters to search through the text."
+text = "This for is a sample text for that you gooooold can use for testing your pattern matching code. It contains various for words gooooold and characters to search through the text."
 pattern = "ing"
 
 st = modified_RegEx()
 
-print(st.read_first_function(input(), 'hola', text))
+print(st.read_first_function(input(), 'CAMBIO', text))
 
 
 
