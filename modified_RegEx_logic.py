@@ -43,8 +43,9 @@ class modified_RegEx():
                 temp -= 1
              
             if found and not self.g_flag :
-                break    
-                      
+                break 
+               
+        self.text = text              
         return self.shifts
     
     
@@ -129,7 +130,8 @@ class modified_RegEx():
             self.shifts.clear()  
             self.shifts.append(s)       
                            
-        self.shifts.sort()             
+        self.shifts.sort()  
+        self.text = text           
         return self.shifts
 
     def build_bmt(self, pattern):
@@ -257,14 +259,21 @@ class modified_RegEx():
             self.build_bmt(self.query) 
             return self.bmh(self.text, self.query)       
     
-text = "This for is a sample text for that you gooooold can use for testing your pattern matching code. It contains various frcan for words gooooold and characters to search through the text."
-pattern = "ing"
+    
+    def return_text(self):
+        return self.text
+
+
+file_name = r'C:\Users\of_de\OneDrive\Documentos\3er Semestre\Estructura de datos y algoritmos 2\Parcial_2\proyecto\example_text.txt'
+with open(file_name, 'r') as archivo:
+    text = archivo.read()
 
 st = modified_RegEx()
 
-print(st.read_first_function(input(), 'CAMBIO', text))
+print(st.read_first_function(input(), 'UNAV', text))
+modified_text = st.return_text()
 
-
-
+with open(file_name, 'w') as archivo:
+    archivo.write(modified_text)
 
     
