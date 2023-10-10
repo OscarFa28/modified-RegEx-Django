@@ -18,7 +18,11 @@ class modified_RegEx():
     def bmh(self, text, pattern): 
         self.size_of_text = len(text)
         self.size_of_pattern = len(pattern)
-        self.build_bmt(pattern)
+        
+        if self.i_flag:
+            self.build_bmt(pattern.lower())
+        else:
+            self.build_bmt(pattern)    
         
         found = False
         for i in range(self.size_of_text - self.size_of_pattern + 1):
@@ -29,8 +33,19 @@ class modified_RegEx():
             temp = i + k
             for k in range(k, -1, -1):
                 
-                if pattern[k] != text[temp] and pattern[k] != '*':
-                    i += (self.dictionary[text[temp]]) - 1
+                if pattern[k] == '*':
+                    letter_pattern = text[temp]
+                    letter_text = text[temp]
+                    
+                elif self.i_flag:
+                    letter_pattern = pattern[k].lower()
+                    letter_text = text[temp].lower()
+                else:
+                    letter_pattern = pattern[k]
+                    letter_text = text[temp] 
+                    
+                if letter_pattern != letter_text:
+                    i += (self.dictionary[letter_text]) - 1
                     break
                 elif k == 0:
                     self.shifts.append(i)
@@ -53,7 +68,12 @@ class modified_RegEx():
         self.size_of_text = len(text)
         self.size_of_pattern = len(pattern)
         self.size_of_pattern_2 = len(pattern_2)
-        self.build_bmt(pattern)
+        
+        if self.i_flag:
+            self.build_bmt(pattern.lower())
+        else:
+            self.build_bmt(pattern)
+            
         found_1 = math.inf
         found_2 = math.inf
         
@@ -66,8 +86,21 @@ class modified_RegEx():
             temp = i + k
             for k in range(k, -1, -1):
                 
-                if pattern[k] != text[temp] and pattern[k] != '*':
-                    i += (self.dictionary[text[temp]]) - 1
+                if pattern[k] == '*':
+                    letter_pattern = text[temp]
+                    letter_text = text[temp]
+                    
+                elif self.i_flag:
+                    letter_pattern = pattern[k].lower()
+                    letter_text = text[temp].lower()
+                else:
+                    letter_pattern = pattern[k]
+                    letter_text = text[temp] 
+                
+                
+                    
+                if letter_pattern != letter_text:
+                    i += (self.dictionary[letter_text]) - 1
                     break
                 elif k == 0:
                     self.shifts.append(i)
@@ -84,7 +117,7 @@ class modified_RegEx():
                 break 
             
             
-        found = False
+        founded_2 = False
         i = 0    
         for i in range(self.size_of_text - self.size_of_pattern_2 + 1):
             if i >= (self.size_of_text - self.size_of_pattern_2 + 1):
@@ -94,12 +127,22 @@ class modified_RegEx():
             temp = i + k
             for k in range(k, -1, -1):
                 
-                if pattern_2[k] != text[temp] and pattern_2[k] != '*':
-                    i += (self.dictionary[text[temp]]) - 1
+                if pattern_2[k] == '*':
+                    letter_pattern_2 = text[temp]
+                    letter_text_2 = text[temp]
+                elif self.i_flag:
+                    letter_pattern_2 = pattern_2[k].lower()
+                    letter_text_2 = text[temp].lower()
+                else:
+                    letter_pattern_2 = pattern_2[k]
+                    letter_text_2 = text[temp] 
+                    
+                if letter_pattern_2 != letter_text_2:
+                    i += (self.dictionary[letter_text_2]) - 1
                     break
                 elif k == 0:
                     self.shifts.append(i)
-                    found = True
+                    founded_2 = True
                     found_2 = i
                     if self.search_and_replace and self.g_flag:
                         text = text[:i] + self.new + text[i + self.size_of_pattern_2:]
@@ -108,27 +151,33 @@ class modified_RegEx():
                     
                 temp -= 1
              
-            if found and not self.g_flag :
+            if founded_2 and not self.g_flag :
                 break    
                 
-                   
-        if found_1 < found_2:
+             
+        founded_3 = True     
+        if found_1 == math.inf and found_2 == math.inf: 
+            founded_3 = False
+                       
+        elif found_1 < found_2:
             s = found_1
             pattern_small = self.size_of_pattern
+            
         else:
             s = found_2
             pattern_small = self.size_of_pattern_2
         
-        if self.search_and_replace and not self.g_flag:
+        if self.search_and_replace and not self.g_flag and founded_3:
                         text = text[:s] + self.new + text[s + pattern_small:]
                         s += len(self.new)
                         self.size_of_text = len(text)  
                         self.shifts.clear()  
                         self.shifts.append(s)   
                         
-        elif not self.search_and_replace:
+        elif not self.search_and_replace and not self.g_flag and founded_3:
             self.shifts.clear()  
-            self.shifts.append(s)       
+            self.shifts.append(s) 
+                  
                            
         self.shifts.sort()  
         self.text = text           
@@ -270,7 +319,7 @@ with open(file_name, 'r') as archivo:
 
 st = modified_RegEx()
 
-print(st.read_first_function(input(), 'UNAV', text))
+print(st.read_first_function(input(), 'LOMI', text))
 modified_text = st.return_text()
 
 with open(file_name, 'w') as archivo:
