@@ -21,7 +21,7 @@ button:hover{
     border-radius: 1em;
 }
 ::-webkit-scrollbar-thumb {
-    background-color: var(--text-100);
+    background-color: var(--bg-300);
     border-radius: 1em;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -30,17 +30,126 @@ button:hover{
 
 .header-title{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin: 0 2em;
+    padding: 0;
+    margin: 0;
 }
 .header-title h1{
     color: var(--primary-100);
+    padding: 0;
+    margin: .2em;
 }
+
+.main{
+    display: flex;
+    height: 30em;
+    margin-top: 1em;
+}
+.query-input{
+    width: 40%;
+    padding: 2em;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+.query-input form{
+    height: 90%;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--bg-200);
+    padding: 3em;
+    border-radius: 1em;
+    align-items: center;
+}
+.query-input input{
+    margin-bottom: 2em;
+    background-color: transparent;
+    border: 2px solid var(--text-100);
+    height: 2em;
+    border-radius: .5em;
+    transition: .5s;
+    width: 80%;
+    color: var(--text-200);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.query-input label{
+    font-size: .8em;
+    font-weight: 400;
+    color: var(--text-100);
+    margin-bottom: .3em;
+    margin-left: .3em;
+    transition: .5s;
+}
+.query-input button{
+    margin-top: 3em;
+    height: 3.5em;
+    width: 3.5em;
+    background-color: var(--primary-100);
+    border-radius: 2em;
+    border: none;
+    padding: 0;
+    transition: .5s;
+    border: 2px solid var(--primary-100);
+}
+.query-input button i{
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+    color: var(--bg-200);
+    transition: .5s;
+}
+.query-input button:hover{
+    background-color: transparent;
+}
+.query-input button:hover i {
+    color: var(--primary-100) ;
+}
+.upload-file{
+    margin-top: 0em !important;
+    background-color: transparent !important;
+    border: none !important;
+    width: 6em !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.upload-file i{
+    color: var(--primary-100) !important;
+}
+.upload-file span{
+    margin-top: .5em;
+    color: var(--primary-100);
+    font-size: .8em;
+    transition: .5s;
+}
+.upload-file:hover i{
+    color: var(--accent-100) !important;
+}
+.upload-file:hover span{
+    color: var(--accent-100) !important;
+}
+.instructions-and-data{
+    width: 60%;
+    padding: 1em;
+    padding-top: 0;
+}
+.instructions-content{
+    color: var(--text-200);
+    height: 100%;
+    border-radius: 1em;
+}
+
 footer{
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
+    background-color: var(--bg-100);
 }
 .footer-container{
     margin: 0 2em;
@@ -52,12 +161,17 @@ footer{
     justify-content: space-between;
     align-items: center;
 }
-.footer-container li{
+.footer-container a{
     display: flex;
     flex-direction: column;
     align-items: center;
     transition: .5s;
     cursor: pointer;
+    color: var(--text-200);
+    text-decoration: none;
+}
+.footer-container li{
+    color: var(--text-200);
 }
 .footer-container li i{
     margin: 0;
@@ -66,6 +180,24 @@ footer{
     margin: 0;
     margin-top: .2em;
 }
-.footer-container li:hover{
+.footer-container li h3{
+    margin: 0;
+}
+.footer-container a:hover{
     color: var(--accent-100);
 }
+
+@media (max-width: 850px) {
+    .main {
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 3em;
+    }
+    .query-input{
+        width: 95%;
+    }
+    .instructions-and-data{
+        margin-top: 3em;
+        width: 95%;
+    }
+  }

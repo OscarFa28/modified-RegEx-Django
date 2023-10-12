@@ -274,8 +274,41 @@ class modified_RegEx():
        
     
     def process(self):
-        #operador or
-        if '|' in self.query:
+        #range
+        if '[' in self.query and ']' and '-' in self.query:
+            range_start = self.query.index('[') + 1
+            range_finish = self.query.index(']') - 1
+            
+            if range_start is int:
+                pass
+            else:
+                range_start = chr(range_start)
+                range_finish = chr(range_finish)
+              
+            i = len(self.query) - 1    
+            for i in range(i, -1, -1):
+                    if self.query[i] == ']':
+                        list_position = self.size_of_pattern - i
+                        
+            self.query =  self.query[:self.query.index('[')] + '#' + self.query[self.query.index(']') + 1:]
+                    
+            
+        #list
+        elif '[' in self.query and ']' in self.query:
+            pass
+        
+        #befor operator
+        elif '?' in self.query:
+            icon_position = self.query.index('?')
+    
+            first_pattern = self.query[:icon_position] + self.query[icon_position+1:]
+            second_pattern = self.query[:icon_position-1] + self.query[icon_position+1:]
+            
+            self.build_bmt_or(first_pattern, second_pattern)   
+            return self.bmh_or(self.text, first_pattern, second_pattern)    
+            
+        #or operator
+        elif '|' in self.query:
             j = len(self.query)-1
             while j > -1:
                 if self.query[j] == '|':
@@ -286,8 +319,8 @@ class modified_RegEx():
             return self.bmh_or(self.text, first_pattern, second_pattern) 
             
         
-        #operador de repetición
-        if '{' in self.query and '}' in self.query:
+        #repetition operator
+        elif '{' in self.query and '}' in self.query:
             i = 0  # Inicializa el índice i
             while i < len(self.query):
                 if self.query[i] == '{':

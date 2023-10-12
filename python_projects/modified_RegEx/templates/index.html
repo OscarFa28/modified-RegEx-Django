@@ -22,27 +22,70 @@
     <header>
         <div class="header-title">
             <h1>Modified RegEx</h1>
-            <h3>Oscar F. de Alba Gtz.</h3>
         </div>
     </header>
    <section class="main"> 
         <div class="query-input">
-
+            <form action="">
+                
+                <label for="query">Query</label>
+                <input type="text" name="query" required>
+                <label for="word">New word</label>
+                <input type="text" name="word">
+                <input type="file" id="fileInput" class="custom-file-input" accept=".txt" style="display: none;">
+                <button class="upload-file" type="button" onclick="document.getElementById('fileInput').click()"><i class="fa fa-upload"></i><span>Choose File</span></button>
+                  
+                <button><i class="fa-solid fa-arrow-right"></i></button>
+            </form>
         </div>
-        <div class="instructions_and_data">
-
+        <div class="instructions-and-data">
+            <div class="instructions-content">
+                <div id="info">
+                    <p><strong>Search Operators:</strong></p>
+                    <ul>
+                      <li><strong>abcd:</strong> Simple search.</li>
+                      <li><strong>[a-z]bc, a[C-H]d, [4-7]34:</strong> Letter and number ranges within square brackets.</li>
+                      <li><strong>[abgs]cd, a[gd], df[ds]fa:</strong> Sets of letters within square brackets.</li>
+                      <li><strong>*:</strong> Wildcard for any letter.</li>
+                      <li><strong>ab?cd:</strong> Optional letter before "?".</li>
+                      <li><strong>abc | fg*i:</strong> Logical "or" operator.</li>
+                      <li><strong>a{5}cd:</strong> Repetition operator.</li>
+                    </ul>
+                    <p><strong>Options:</strong> "Search" and "Search and Replace."</p>
+                    <p><strong>Flags:</strong> "g" for global search, "i" for case-insensitivity.</p>
+                    <p><strong>Search Queries:</strong></p>
+                    <ul>
+                      <li><strong>For Search:</strong> Start with "f" followed by the pattern and optional flags.</li>
+                      <li><strong>For Search and Replace:</strong> Begin with "fr" followed by pattern, replacement text, and flags.</li>
+                    </ul>
+                    <p><strong>Notes:</strong></p>
+                    <ul>
+                      <li>One operator per query (except "|").</li>
+                      <li>Queries use alphanumeric characters (a-z, A-Z, 0-9).</li>
+                    </ul>
+                  </div>
+                  
+                  
+            </div>
         </div>
    </section>
    <footer>
         <div class="footer-container">
             <ul>
                 <li>
-                    <i class="fa-brands fa-github"></i>
-                    <h5>GitHub</h5>
+                    <a href="https://github.com/OscarFa28">
+                        <i class="fa-brands fa-github"></i>
+                        <h5>GitHub</h5>
+                    </a>
                 </li>
                 <li>
-                    <i class="fa-brands fa-linkedin"></i>
-                    <h5>LinkedIn</h5>
+                    <h3>Oscar F. de Alba Gtz.</h3>
+                </li>
+                <li>
+                    <a href="https://www.linkedin.com/in/oscar-fabrizio-de-alba-guti%C3%A9rrez-244a17ab/">
+                        <i class="fa-brands fa-linkedin"></i>
+                        <h5>LinkedIn</h5>
+                    </a>
                 </li>
             </ul>
         </div>
