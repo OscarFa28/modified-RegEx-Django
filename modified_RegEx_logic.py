@@ -5,6 +5,7 @@ class modified_RegEx():
     def __init__(self):
         self.shifts = []
         self.dictionary = {}
+        self.second_dictionary = {}
         self.size_of_pattern = 0
         self.size_of_pattern_2 = 0
         self.size_of_text = 0
@@ -182,11 +183,68 @@ class modified_RegEx():
         self.shifts.sort()  
         self.text = text           
         return self.shifts
+    
+    
+    def bmh_range(self, text, pattern): 
+        self.size_of_text = len(text)
+        self.size_of_pattern = len(pattern)
+        
+        if self.i_flag:
+            self.build_bmt(pattern.lower())
+        else:
+            self.build_bmt(pattern)    
+        
+        found = False
+        for i in range(self.size_of_text - self.size_of_pattern + 1):
+            if i >= (self.size_of_text - self.size_of_pattern + 1):
+                break
+            
+            k = self.size_of_pattern - 1
+            temp = i + k
+            for k in range(k, -1, -1):
+                
+                range_bool = False
+                if pattern[k] == '*':
+                    letter_pattern = text[temp]
+                    letter_text = text[temp]
+                    range_bool = True
+                    
+                elif self.i_flag:
+                    letter_pattern = pattern[k].lower()
+                    letter_text = text[temp].lower()
+                else:
+                    letter_pattern = pattern[k]
+                    letter_text = text[temp] 
+                    
+                if letter_pattern == '#':
+                    if letter_text in self.second_dictionary:
+                        range_bool = True
+                    else:
+                        range_bool = False
+                    
+                if letter_pattern != letter_text and range_bool == False:
+                    i += (self.dictionary[letter_text]) - 1
+                    break
+                elif k == 0:
+                    self.shifts.append(i)
+                    found = True
+                    if self.search_and_replace:
+                        text = text[:i] + self.new + text[i + self.size_of_pattern:]
+                        i += len(self.new)
+                        self.size_of_text = len(text)
+                    
+                temp -= 1
+             
+            if found and not self.g_flag :
+                break 
+               
+        self.text = text              
+        return self.shifts
 
     def build_bmt(self, pattern):
         i = self.size_of_pattern - 1
         for i in range(i, -1, -1):
-            if pattern[i] == self.size_of_pattern -1:
+            if i == self.size_of_pattern -1:
                 self.dictionary[pattern[i]] = self.size_of_pattern
             elif pattern[i] not in self.dictionary:
                 self.dictionary[pattern[i]] = self.size_of_pattern - i
@@ -219,7 +277,48 @@ class modified_RegEx():
                 
         for j in range(127):
             if chr(j) not in self.dictionary:
-                self.dictionary[chr(j)] = len(small_pattern)            
+                self.dictionary[chr(j)] = len(small_pattern)      
+                
+                
+    def build_bmt_range(self, pattern, first, last, max_index):
+        i = self.size_of_pattern - 1
+        for i in range(i, -1, -1):
+            if i == self.size_of_pattern -1:
+                self.second_dictionary[pattern[i]] = self.size_of_pattern
+            elif pattern[i] not in self.dictionary and pattern[i] != '#':
+                self.dictionary[pattern[i]] = self.size_of_pattern - i
+
+        for k in range(ord(first), ord(last) + 1):
+            if chr(k) not in self.dictionary:
+                self.second_dictionary[chr(k)] = max_index
+            elif chr(k) in self.dictionary:
+                self.second_dictionary[chr(k)] = self.dictionary[chr(k)]    
+        
+        for j in range(127):
+            if chr(j) not in self.dictionary:
+                self.dictionary[chr(j)] = len(pattern)
+                
+         
+        
+    
+    def build_bmt_list(self, pattern, list, max_index):
+        i = self.size_of_pattern - 1
+        for i in range(i, -1, -1):
+            if i == self.size_of_pattern -1:
+                self.second_dictionary[pattern[i]] = self.size_of_pattern
+            elif pattern[i] not in self.dictionary and pattern[i] != '#':
+                self.dictionary[pattern[i]] = self.size_of_pattern - i
+
+        for k in range(len(list)):
+            if list[k] not in self.dictionary:
+                self.second_dictionary[list[k]] = max_index
+            elif list[k] in self.dictionary:
+                self.second_dictionary[list[k]] = self.dictionary[list[k]]    
+        
+        for j in range(127):
+            if chr(j) not in self.dictionary:
+                self.dictionary[chr(j)] = len(pattern)
+                                
          
     def read_first_function(self, query, new, text):
         self.query = query  
@@ -276,26 +375,45 @@ class modified_RegEx():
     def process(self):
         #range
         if '[' in self.query and ']' and '-' in self.query:
-            range_start = self.query.index('[') + 1
-            range_finish = self.query.index(']') - 1
+            range_start = self.query[self.query.index('[') + 1]
+            range_finish = self.query[self.query.index(']') - 1]
             
-            if range_start is int:
-                pass
-            else:
-                range_start = chr(range_start)
-                range_finish = chr(range_finish)
-              
-            i = len(self.query) - 1    
-            for i in range(i, -1, -1):
-                    if self.query[i] == ']':
-                        list_position = self.size_of_pattern - i
                         
             self.query =  self.query[:self.query.index('[')] + '#' + self.query[self.query.index(']') + 1:]
+            
+            range_index = 1
+            k = len(self.query) - 1
+            
+            for k in range(k, -1, -1):
+                if self.query[k] == '#':
+                    range_index = len(self.query) - k
+                    break
+                    
+            self.build_bmt_range(self.query, range_start, range_finish, range_index)
+            return self.bmh_range(self.text, self.query)
                     
             
         #list
         elif '[' in self.query and ']' in self.query:
-            pass
+            range_start = self.query.index('[') + 1
+            range_finish = self.query.index(']') - 1
+            
+            list = []
+            for i in range(range_start, range_finish+1):
+                list.append(self.query[i])
+                
+            self.query =  self.query[:self.query.index('[')] + '#' + self.query[self.query.index(']') + 1:]
+            
+            range_index = 1
+            k = len(self.query) - 1
+            for k in range(k, -1, -1):
+                if self.query[k] == '#':
+                    range_index = len(self.query) - k
+                    break
+            
+            self.build_bmt_list(self.query, list, range_index)
+            return self.bmh_range(self.text, self.query)
+            
         
         #befor operator
         elif '?' in self.query:
