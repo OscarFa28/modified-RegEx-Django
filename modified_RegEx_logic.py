@@ -464,7 +464,7 @@ class modified_RegEx():
         return self.text
 
 
-file_name = r'C:\Users\of_de\OneDrive\Documentos\3er Semestre\Estructura de datos y algoritmos 2\Parcial_2\proyecto\example_text.txt'
+file_name = 'example_text.txt'
 with open(file_name, 'r') as archivo:
     text = archivo.read()
 
