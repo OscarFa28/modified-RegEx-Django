@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +7,8 @@
     <title>Modified RegEx</title>
 
     <!-- CSS files -->
-    <link rel="stylesheet" type="text/css" href="/Parcial_2/proyecto/python_projects/modified_RegEx/static/modified_RegEx/css/modified_RegEx.css">
-    <link rel="stylesheet" type="text/css" href="/Parcial_2/proyecto/python_projects/modified_RegEx/static/modified_RegEx/css/palette.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'modified_RegEx/css/modified_RegEx.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'modified_RegEx/css/palette.css' %}">
     <!-- Fonts -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap');
@@ -26,17 +27,29 @@
     </header>
    <section class="main"> 
         <div class="query-input">
-            <form action="">
-                
+            <form action="{% url 'modified_RegEx:regEx_process' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
                 <label for="query">Query</label>
-                <input type="text" name="query" required>
-                <label for="word">New word</label>
-                <input type="text" name="word">
-                <input type="file" id="fileInput" class="custom-file-input" accept=".txt" style="display: none;">
+                <input type="text" id="queryInput" onkeyup="verificarInput()" name="query" autocomplete="new-password" required>
+                <label for="word" id="wordLabel" style="color: var(--bg-300);">New word</label>
+                <input type="text" id="newWordInput" name="new" style="border-color: var(--bg-300);">
+                <input type="file" name="txt_file" id="fileInput" class="custom-file-input" accept=".txt" style="display: none;" required>
                 <button class="upload-file" type="button" onclick="document.getElementById('fileInput').click()"><i class="fa fa-upload"></i><span>Choose File</span></button>
                   
                 <button><i class="fa-solid fa-arrow-right"></i></button>
-            </form>
+            </form>            
+            <div class="result">
+                <div class="positions">
+                    
+                        <span>
+                            {% for position in positions %}
+                                {{ position }}
+                            {% endfor %}
+                        </span>
+                    
+                </div>
+                <i class="fa-solid fa-download"></i>
+            </div>
         </div>
         <div class="instructions-and-data">
             <div class="instructions-content">
@@ -93,7 +106,25 @@
     
 </body>
 
-<!-- JS files -->
-<script src="/Parcial_2/proyecto/python_projects/modified_RegEx/static/modified_RegEx/js/modified_RegEx.js"></script> 
+<!-- JS code -->
+<script>
+    function verificarInput(event) {
+        var texto = document.getElementById("queryInput").value;
+        if (texto.substring(0, 2).includes('r')) {
+            document.getElementById("newWordInput").style.borderColor = "var(--text-100)";
+            document.getElementById("wordLabel").style.color = "var(--text-100)";
+        } else {
+            document.getElementById("newWordInput").style.borderColor = "var(--bg-300)";
+            document.getElementById("wordLabel").style.color = "var(--bg-300)";
+        }
+    }
+
+    // Evitar el envío del formulario solo si se presiona 'Enter'
+    document.getElementById("queryInput").addEventListener("keydown", function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Evitar el envío del formulario en caso de presionar 'Enter'
+        }
+    });
+    </script>
 
 </html>
