@@ -32,7 +32,7 @@
                 <label for="query">Query</label>
                 <input type="text" id="queryInput" onkeyup="verificarInput()" name="query" autocomplete="new-password" required>
                 <label for="word" id="wordLabel" style="color: var(--bg-300);">New word</label>
-                <input type="text" id="newWordInput" name="new" style="border-color: var(--bg-300);">
+                <input type="text" id="newWordInput" name="new" style="border-color: var(--bg-300);" autocomplete="new-password">
                 <input type="file" name="txt_file" id="fileInput" class="custom-file-input" accept=".txt" style="display: none;" required>
                 <button class="upload-file" type="button" onclick="document.getElementById('fileInput').click()"><i class="fa fa-upload"></i><span>Choose File</span></button>
                   
@@ -42,13 +42,11 @@
                 <div class="positions">
                     
                         <span>
-                            {% for position in positions %}
-                                {{ position }}
-                            {% endfor %}
+                            {{positions}}
                         </span>
                     
                 </div>
-                <i class="fa-solid fa-download"></i>
+                <i onclick="downloadTxt('{{ modified_text|safe }}')" class="fa-solid fa-download"></i>
             </div>
         </div>
         <div class="instructions-and-data">
@@ -125,6 +123,20 @@
             event.preventDefault(); // Evitar el envío del formulario en caso de presionar 'Enter'
         }
     });
+
+    function downloadTxt(contentFile) {
+        var file = new Blob([contentFile], {type: 'text/plain'});
+
+        var urlArchivo = URL.createObjectURL(file);
+        var downloadLink = document.createElement("a");
+        downloadLink.download = "new_file.txt";
+        downloadLink.href = urlArchivo;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+
+        document.body.removeChild(downloadLink);
+    }
     </script>
 
 </html>

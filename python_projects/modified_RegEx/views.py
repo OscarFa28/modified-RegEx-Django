@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .modified_RegEx_logic import modified_RegEx
-from django.http import HttpResponse, FileResponse
-from django.template import loader
+from django.utils.html import escapejs
 
 # Create your views here.
 def index(request):
@@ -24,13 +23,8 @@ def regEx_process(request):
             return render(request, "error.html", {'error': str(e)})
         
         modified_text = logic.return_text()
-
-        try:
-            with open(file.name, 'w') as archivo:
-                archivo.write(modified_text)
-        except Exception as e:
-            return render(request, "error.html", {'error': str(e)})
-
+        modified_text = escapejs(modified_text)
+        
         context = {
             'positions': positions,
             'modified_text': modified_text
@@ -41,8 +35,3 @@ def regEx_process(request):
        
         return render(request, "error.html")
 
-def download_file(request, file_name):
-    with open(file_name + '.txt', 'r') as file:
-        response = HttpResponse(file.read(), content_type='text/plain')
-        response['Content-Disposition'] = 'attachment; filename="modified_file.txt"'
-        return response

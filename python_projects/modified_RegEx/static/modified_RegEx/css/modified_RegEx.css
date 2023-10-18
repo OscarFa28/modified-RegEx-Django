@@ -163,7 +163,7 @@ button:hover{
     display: flex;
     justify-content: center;
     border-radius: .5em;
-    max-height: 2em;  /* Ajusta la altura máxima según sea necesario */
+    height: 2em;  /* Ajusta la altura máxima según sea necesario */
     overflow-y: auto;
     
 }
@@ -173,7 +173,7 @@ button:hover{
     font-size: .8em;
     color: var(--text-200);
     width: 100%;
-    max-height: 2em;
+    height: 2em;
     text-align: center;
 }
 .result i{
