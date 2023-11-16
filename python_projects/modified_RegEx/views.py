@@ -35,3 +35,6 @@ def regEx_process(request):
        
         return render(request, "error.html")
 
+def file_compressor(request):
+    
+    return render(request, "file_compressor.html")

@@ -1,0 +1,47 @@
+body{
+   font-family: 'Expletus Sans', sans-serif;
+    color: var(--text-100);
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-100);
+}
+.content{
+    height: 40em;
+    width: 100%;
+    background: rgb(0,245,160);
+    background: -moz-radial-gradient(circle, rgba(0,245,160,1) 3%, rgba(22,24,21,1) 50%);
+    background: -webkit-radial-gradient(circle, rgba(0,245,160,1) 3%, rgba(22,24,21,1) 50%);
+    background: radial-gradient(circle, rgba(0,245,160,1) 3%, rgba(22,24,21,1) 50%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00f5a0",endColorstr="#161815",GradientType=1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main-menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(22,24,21,.5);
+    width: 40%;
+    border-radius: 2em;
+}
+.main-menu h1{
+    margin-bottom: .1em;
+}
+.main-menu hr{
+    padding: 0;
+    margin: 0;
+    width: 60%;
+    margin-bottom: 1em;
+}
+.description{
+    width: 70%;
+    text-align: center;
+    font-size: .9em;
+    font-family: 'Inter','Expletus Sans', sans-serif;
+}
+.select-file{
+    display: flex;
+    align-items: center;
+}
