@@ -1,2 +1,2 @@
 # modified-regEx-Django
-full stak projects
+full-stack projects
