@@ -15,6 +15,7 @@
     </style>
     <!-- Icons -->
     <script src="https://kit.fontawesome.com/c986eafe9b.js" crossorigin="anonymous"></script>
+    <script src="{% static 'tu_aplicacion/file_compressor.js' %}"></script>
     <!-- Icon -->
     <link
       rel="icon"
@@ -34,10 +35,40 @@
                 </p>
             </div>
             <div class="select-file">
-                <button>Upload</button>
+                <button id="uploadBtn">Upload File</button>
+                <input type="file" id="fileInput" style="display: none;">
+                <ul id="selectedFiles">
+                    <li>Ningún archivo</li>
+                </ul>
             </div>
-            <input type="text" placeholder="compressed file name">
+            <input class="file-name" id="file-name" type="text" placeholder="compressed file name">
+            <button class="send-action" onclick="compressFile(true)">Compress</button>
+            <button class="send-action-d" onclick="compressFile(false)">Decompress</button>
         </div>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
     </section>
+    
 </body>
+<script>
+    document.getElementById('uploadBtn').addEventListener('click', function() {
+        const fileInput = document.getElementById('fileInput');
+    
+        fileInput.addEventListener('change', function() {
+            const fileList = this.files;
+            const ul = document.getElementById('selectedFiles');
+            ul.innerHTML = ''; 
+    
+            for (let i = 0; i < fileList.length; i++) {
+                const li = document.createElement('li');
+                li.textContent = fileList[i].name;
+                ul.appendChild(li);
+            }
+        });
+    
+        fileInput.click();
+    });
+    
+</script>
+<script src="{% static 'modified_RegEx/js/file_compressor.js' %}"></script>
 </html>

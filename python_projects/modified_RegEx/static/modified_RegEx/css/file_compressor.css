@@ -44,4 +44,107 @@ body{
 .select-file{
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-top: 1em;
+    width: 100%;
+    flex-direction: column;
 }
+.select-file button{
+    width: 50%;
+    border: 2px solid rgb(0,245,160);
+    background-color: transparent;
+    color: rgb(0,245,160);
+    padding: .4em;
+    font-weight: 550;
+    font-size: 1em;
+    border-radius: 1em;
+    transition: .5s;
+    cursor: pointer;
+}
+.select-file ul{
+    display: flex;
+    list-style: none;
+    padding: 0;
+    font-size: .9em;
+    overflow: auto;
+    max-width: 70%;
+}
+ul::-webkit-scrollbar {
+    width: 5px; 
+  }
+  
+  ul::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+  
+  ul::-webkit-scrollbar-thumb {
+    background-color: var(--bg-100);
+    border-radius: 6px; 
+  }
+.select-file li{
+    margin-right: 1em;
+    margin-left: 1em;
+}
+.select-file button:hover{
+    background-color: transparent;
+    color: white;
+    border-color: white;
+
+}
+.file-name{
+    background-color: transparent;
+    border: 1px solid white;
+    padding: .3em;
+    border-radius: .5em;
+    color: white;
+    text-align: center;
+}
+.file-name::placeholder {
+    color: rgb(187, 187, 187); /* Cambia el color del texto del placeholder a gris claro */
+  }
+  
+.send-action{
+    padding: .3em;
+    font-size: 1em;
+    border: none;
+    background-color: white;
+    color: rgb(66, 66, 66);
+    font-weight: 550;
+    border-radius: .5em;
+    margin-top: 3em;
+    margin-bottom: 2em;
+    width: 40%;
+    transition: .4s;
+    cursor: pointer;
+}
+.send-action:hover{
+    background-color: transparent;
+    color: white;
+}
+.send-action-d{
+    padding: .3em;
+    font-size: 1em;
+    border: none;
+    background-color: white;
+    color: rgb(66, 66, 66);
+    font-weight: 550;
+    border-radius: .5em;
+    margin-top: 0em;
+    margin-bottom: 2em;
+    width: 40%;
+    transition: .4s;
+    cursor: pointer;
+}
+.send-action-d:hover{
+    background-color: transparent;
+    color: white;
+}
+@media (max-width: 850px) {
+    .main-menu{
+        width: 100%;
+    }
+    .select-file ul{
+        margin-bottom: 5em;
+        max-width: 90%;
+    }
+  }
