@@ -94,4 +94,102 @@ class FileCompression:
             encodedText += self.__binaryCodes[char]
         return encodedText
 
-    
+
+
+
+
+    # Añadir relleno al texto codificado para asegurar su longitud en múltiplos de 8
+    def __getPaddedEncodedText(self, encodedText):
+        paddedAmount = 8 - (len(encodedText) % 8)  # Calcula la cantidad de bits a agregar
+
+        # Agrega ceros al texto codificado para hacer su longitud un múltiplo de 8
+        for _ in range(paddedAmount):
+            encodedText += "0"
+        
+        # Representa la cantidad de bits agregados en formato binario de 8 bits
+        paddedInfo = "{0:08b}".format(paddedAmount)
+        
+        # Combina la información del relleno con el texto codificado
+        paddedEncodedText = paddedInfo + encodedText
+        
+        return paddedEncodedText  # Retorna el texto codificado con el relleno añadido
+
+
+    # Convertir el texto con ceros y unos en una lista de enteros
+    def __getIntList(self, paddedEncodedText):
+        intList = []
+        
+        # Itera sobre el texto codificado en bloques de 8 bits (1 byte)
+        for i in range(0, len(paddedEncodedText), 8):
+            byte = paddedEncodedText[i:i + 8]  # Toma un bloque de 8 bits
+            
+            # Convierte el bloque de bits a un entero y lo agrega a la lista
+            intList.append(int(byte, 2))
+        
+        return intList  # Retorna la lista de enteros correspondientes al texto codificado
+
+
+    # Comprimir un archivo
+    def compress(self, file):
+        text = file.read().decode('utf-8')  # Leer el archivo y obtener su contenido como texto
+        return self.huffman_compress(text)  # Llamar a la función huffman_compress
+
+    # Función principal para comprimir utilizando el algoritmo de Huffman
+    def huffman_compress(self, text):
+        freqDict = self.__frequencyDictionary(text)
+        self.__buildHeap(freqDict)
+        self.__buildTree()
+        self.__buildBinaryCodes()
+        encodedText = self.__getEncodedText(text)
+        paddedEncodedText = self.__getPaddedEncodedText(encodedText)
+        intList = self.__getIntList(paddedEncodedText)
+        return intList
+
+    # Remover el relleno del texto
+    def __removePadding(self, text):
+        paddedInfo = text[:8]  # Obtiene los primeros 8 bits que representan la información del relleno
+        paddedAmount = int(paddedInfo, 2)  # Convierte la información del relleno a un número entero
+        
+        # Remueve los bits de relleno del final del texto para obtener el texto original
+        text = text[8:]  # Descarta la información del relleno
+        actualText = text[:-1 * paddedAmount]  # Remueve los bits de relleno basados en la información obtenida
+        
+        return actualText  # Retorna el texto original sin el relleno agregado
+
+
+    # Decodificar el texto a partir de los códigos binarios
+    def __decodeText(self, text):
+        # Decodifica el texto utilizando los códigos binarios almacenados
+        decodedText = ""  # Inicializa el texto decodificado
+        currBits = ""  # Inicializa los bits actuales a vacío
+        
+        # Itera a través de los bits del texto codificado
+        for bit in text:
+            currBits += bit  # Agrega el bit actual al conjunto de bits actuales
+            
+            # Verifica si los bits actuales tienen una correspondencia en los códigos binarios
+            if self.__removeBinaryCodes.get(currBits) is not None:
+                # Si se encuentra una correspondencia, obtén el carácter correspondiente
+                char = self.__removeBinaryCodes[currBits]
+                decodedText += str(char)  # Agrega el carácter decodificado al texto resultante
+                currBits = ""  # Reinicia los bits actuales para la próxima secuencia de bits
+        
+        return decodedText  # Retorna el texto decodificado
+
+
+    # Descomprimir un archivo
+    def decompress(self, uploaded_file):
+        bitString = ""  # Inicializa una cadena de bits vacía
+        byte = uploaded_file.read(1)  # Lee un byte del archivo
+        
+        # Lee byte por byte del archivo y convierte cada byte en su representación binaria de 8 bits
+        while byte:
+            byte = ord(byte)  # Convierte el byte a su valor entero
+            bits = bin(byte)[2:].rjust(8, "0")  # Convierte el entero a su representación binaria
+            bitString += bits  # Agrega los bits al string de bits
+            byte = uploaded_file.read(1)  # Lee el próximo byte del archivo
+        
+        # Elimina el relleno y decodifica el texto comprimido
+        actualText = self.__removePadding(bitString)  # Elimina el relleno del texto comprimido
+        decompressedText = self.__decodeText(actualText)  # Decodifica el texto comprimido
+        return decompressedText  # Retorna el texto descomprimido
